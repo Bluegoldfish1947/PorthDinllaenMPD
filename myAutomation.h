@@ -7,18 +7,22 @@ SEQUENCE(1)	// ID
 AUTOSTART
 LCD(0, " Porth Dinllaen MPD ")
 LCD(4, " Porth Dinllaen MPD ")
-LCD(5, "  Version  241130c ")
+LCD(5, "  Version  250121A ")
 LCD(6, "Passwd: challenge100")
 DONE
 
-//SEQUENCE(2) // Heartbeat
-//AUTOSTART
-//SET(HEARTBEAT)
-//DELAY(2)
-//RESET(HEARTBEAT)
-//DELAY(498)
-//FOLLOW(2)
-//DONE
+SEQUENCE(2) // Heartbeat
+AUTOSTART
+SET(HEARTBEAT)
+DELAY(2)
+RESET(HEARTBEAT)
+DELAY(286)
+SET(HEARTBEAT)
+DELAY(2)
+RESET(HEARTBEAT)
+DELAY(700)
+FOLLOW(2)
+DONE
 
 SEQUENCE(200)   // Operates turnouts and signal
 AUTOSTART
@@ -87,21 +91,21 @@ IF(SIGNALBUTTON)
     RESET(T2TLED)
     SET(T2CLED)
  ENDIF
- IFTHROWN(T3)
+ IFCLOSED(T3)
     SET(T3TLED)
     RESET(T3CLED)
  ELSE
     RESET(T3TLED)
     SET(T3CLED)
  ENDIF
- IFTHROWN(T4)
+ IFCLOSED(T4)
     SET(T4TLED)
     RESET(T4CLED)
  ELSE
     RESET(T4TLED)
     SET(T4CLED)
  ENDIF
- IFTHROWN(T5)
+ IFCLOSED(T5)
     SET(T5TLED)
     RESET(T5CLED)
  ELSE
@@ -122,8 +126,24 @@ IF(SIGNALBUTTON)
     RESET(SIGNALREDLED)
     SET(SIGNALGREENLED)
  ENDIF
- RESET(HEARTBEAT)
  DELAY(BUTTONDELAY)
- SET(HEARTBEAT)
  FOLLOW(200)
  DONE
+
+/*
+
+Roster
+
+e.g. ROSTER(999,"Loco Name","F0/F1/*F2/F3/F4/F5/F6/F7/F8")
+Where:
+	999 - is the DCC address of your loco
+	Loco Name - is anything you want to see as the name of this loco in the throttle apps
+	F0 F1 F3 … F27. - are the names that you want to see on the buttons for the functions specific to this loco
+
+Note that if the function is preceded by a * it indicates ‘momentary’ acton rather than ‘latching’ (On/Off)
+The most common example of this is the Horn/Whistle which is commonly on F2.
+If a function is not available leave the spot empty - Don’t even have the space character.
+e.g. 
+*/
+ROSTER(4468,"LNER 4468","//Sound On/*Whistle/*Whistle2/Brake/Drain/Coal Shvl/Rail-Squeal//Inertia/Injector")
+
